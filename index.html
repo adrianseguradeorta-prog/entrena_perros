@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#172d25">
+<meta name="description" content="Entrenamiento canino por días: obediencia, búsqueda, autocontrol y registro de prácticas.">
+<title>A la pista · Entrenamiento canino</title>
+<style>
+:root{font-family:"Instrument Sans",system-ui,sans-serif;color:#172d25;background:#f3f2e9;line-height:1.5;--green:#172d25;--muted:#4d6155;--paper:#fffcf4;--edge:#d5ddcf;--lime:#dcf284}
+*{box-sizing:border-box}body{margin:0}button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}button:disabled{opacity:.5;cursor:default}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #60823c;outline-offset:4px}
+header{background:var(--green);color:#fffdf4}header>div,main{width:min(1050px,100% - 32px);margin:auto}.top{min-height:65px;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:850;letter-spacing:-.035em;font-size:1.35rem}.top nav{display:flex;gap:6px}.top button{border:0;background:none;color:inherit;padding:8px 10px;border-radius:8px}.top button[aria-current]{background:#345347;color:#fff}
+main{padding:28px 0 48px}.hero{background:var(--green);color:#fffdf4;border-radius:23px;padding:clamp(22px,5vw,46px);display:grid;grid-template-columns:1fr minmax(180px,30%);gap:24px;align-items:center}.hero h1,.view-title{font-size:clamp(2rem,6vw,4rem);line-height:1;letter-spacing:-.065em;margin:6px 0 14px}.hero p{margin:0;color:#dbe9da}.eyebrow{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}.hero .eyebrow{color:var(--lime)}.meter{padding:18px;background:#274438;border-radius:14px}.meter strong{font-size:2rem;letter-spacing:-.06em}.meter span{display:block;font-size:.87rem;color:#dbe9da}progress{width:100%;height:9px;border:0;border-radius:20px;background:#59746b;overflow:hidden}progress::-webkit-progress-bar{background:#59746b}progress::-webkit-progress-value{background:var(--lime)}progress::-moz-progress-bar{background:var(--lime)}
+.daynav{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px;gap:8px}.daynav strong{text-align:center}.grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:16px;align-items:start}.panel{background:var(--paper);border:1px solid var(--edge);border-radius:18px;padding:clamp(15px,3vw,25px)}.panel h2{line-height:1.15;margin:0 0 10px;letter-spacing:-.035em}.panel p{margin:0 0 12px}.muted,small{color:var(--muted)}.exercise{border-top:1px solid var(--edge);padding:15px 0}.exercise:last-child{padding-bottom:0}.exercise h3{margin:0 0 5px}.exercise p{margin:0 0 8px}.exercise details{margin:7px 0 12px;color:var(--muted)}summary{cursor:pointer;font-weight:700}.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.btn{padding:8px 12px;border:1px solid #bdcbbd;border-radius:9px;background:transparent;min-height:44px;font-weight:730}.btn:hover{background:#edf3e2}.primary{background:var(--lime);border-color:#acc050}.primary:hover{background:#e6f8a3}.wide{width:100%}.clock{font-size:clamp(2.65rem,8vw,3.75rem);font-weight:830;line-height:1.2;letter-spacing:-.065em;font-variant-numeric:tabular-nums}.tools{display:grid;gap:12px}.tools fieldset{border:0;border-top:1px solid var(--edge);padding:10px 0 0;margin:0;min-width:0}.tools legend{font-weight:750;padding-right:8px}.notes{max-width:650px;margin-top:16px}.notes textarea{display:block;width:100%;margin:8px 0;min-height:76px;padding:9px;border:1px solid #bdcbbd;border-radius:8px;background:white}.stack{display:grid;gap:10px}.daylist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.daycard{text-align:left;padding:14px;background:var(--paper);border:1px solid var(--edge);border-radius:12px}.daycard:hover{border-color:#638164}.daycard strong,.daycard span{display:block}.daycard span{font-size:.8rem;color:var(--muted)}.status{min-height:1.5em;color:var(--muted);margin:10px 0 0}.score{font-size:.83rem;color:var(--muted);font-variant-numeric:tabular-nums}.foot{margin-top:16px}.feedback{margin-top:16px}.history{padding-left:20px}.history li{margin:5px 0}[hidden]{display:none!important}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;gap:14px}.hero .meter{padding:10px 14px}.meter strong{font-size:1.55rem}.top{flex-wrap:wrap;gap:3px;padding:7px 0}.top button{padding:7px}.daynav .btn{padding:6px 8px}}
+@media(max-width:370px){.daylist{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="top"><div class="brand">A la pista</div><nav aria-label="Secciones"><button data-view="today" aria-current="page">Sesión</button><button data-view="plan">Plan</button><button data-view="log">Registro</button></nav></div></header>
+<main>
+<section id="today" aria-label="Sesión">
+<div class="hero"><div><div id="phase" class="eyebrow"></div><h1 id="dayTitle"></h1><p id="dayGoal"></p></div><div class="meter"><strong id="progressText"></strong><span>días practicados</span><progress id="progressBar" max="14" aria-label="Días practicados"></progress></div></div>
+<div class="daynav"><button id="prev" class="btn">← Anterior</button><strong id="dayNumber"></strong><button id="next" class="btn">Siguiente →</button></div>
+<div class="grid">
+<section class="panel"><h2>Ejercicios</h2><p id="equipment" class="muted"></p><div id="exercises"></div></section>
+<aside class="panel tools" aria-label="Herramientas">
+<div><h2>Cronómetro</h2><div id="clock" class="clock" role="timer">00:00</div><div class="row"><button id="timerToggle" class="btn">Iniciar</button><button id="timerReset" class="btn">Reiniciar</button></div><small id="timerTarget"></small></div>
+<fieldset><legend>Premiar</legend><button class="btn primary wide" id="reward">Marcar y contar premio</button><div class="row"><small id="rewardCount"></small><button id="undoReward" class="btn">Deshacer</button></div><label><input id="sound" type="checkbox"> Sonido opcional</label><div><small>Di «sí» justo al acertar y entrega enseguida comida o juego. Si activas el sonido, úsalo como marcador y entrega el premio igual.</small></div></fieldset>
+</aside>
+</div>
+<section class="panel feedback"><h2>Cerrar la sesión</h2><label for="notes">Nota de la práctica</label><div class="notes"><textarea id="notes" rows="2" maxlength="400" placeholder="Lugar, distracción o ajuste para la próxima vez"></textarea></div><div class="row"><button id="finish" class="btn primary">Guardar y completar día</button><button id="repeat" class="btn">Guardar para repetir</button></div><p id="feedback" class="status" role="status"></p></section>
+</section>
+<section id="plan" hidden><h1 class="view-title">Plan exprés</h1><p>14 días, una sesión de 3 a 5 minutos al día. El recorrido suma 56 minutos de práctica prevista. Empieza en casa y cambia solo una dificultad cada vez. Si hay dos fallos seguidos, acorta la distancia o simplifica el ejercicio.</p><div id="days" class="daylist"></div><div class="panel foot"><h2>Después de los 14 días</h2><p>Para subir un nivel, busca al menos 8 aciertos de 10 en dos prácticas distintas. Puedes repartir los intentos en tandas cortas. Mantén lo aprendido con dos búsquedas semanales y pequeñas prácticas de llamada y espera durante los paseos.</p><p>Material básico: premios pequeños, manta, juguete seguro y arnés con correa larga para trabajar distancia en un lugar despejado. Entrena con premios, juego y pausas.</p><p><a href="https://avsab.org/resources/position-statements/">Guía de la AVSAB sobre entrenamiento con recompensas</a></p></div></section>
+<section id="log" hidden><h1 class="view-title">Registro</h1><p>Los datos se guardan en este navegador. Exporta una copia si vas a cambiar de dispositivo.</p><div class="row"><button id="export" class="btn">Exportar copia</button><button id="importButton" class="btn">Importar copia</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><p id="importStatus" class="status" role="status"></p><div id="history" class="stack"></div></section>
+</main>
+<script>
+'use strict';
+
+const plan = [
+  ['Atención y sentado','Arranque',3,'Consigue que te mire y se siente con un gesto suave.','Premios pequeños.',[
+    ['Nombre','Di su nombre una vez cuando esté cerca. Marca en cuanto te mire y premia.','Mira hacia ti sin tener que repetir el nombre.'],
+    ['Sienta','Mueve un premio desde su nariz hacia arriba. Marca cuando se siente. Cuando el gesto sea fácil, di «sienta» antes de hacerlo.','Se sienta con el gesto. Prueba después con la mano vacía.']]],
+  ['Tumba y liberación','Arranque',3,'Enseña la posición y la palabra que termina el ejercicio.','Premios y suelo antideslizante.',[
+    ['Tumba','Baja el premio desde la nariz al suelo y muévelo un poco hacia delante. Marca cuando apoye los codos.','Apoya los codos con el gesto.'],
+    ['Libre','Tras un segundo en «sienta» o «tumba», di «libre» y aléjate un paso. Premia que salga de la posición contigo.','Sale de la posición al oír la señal.']]],
+  ['Primera llamada','Arranque',3,'Haz que venir hasta ti merezca la pena.','Premios y pasillo tranquilo.',[
+    ['Ven','Desde uno o dos metros, di «ven» y retrocede. Premia cuando llegue a tus pies. Prueba tres veces.','Llega a tus pies tras una señal.'],
+    ['Toca','Acerca la palma abierta a su nariz. Marca el contacto con el hocico. Cuando lo ofrezca con facilidad, añade «toca».','Toca la palma sin que se la acerques tú hasta el hocico.']]],
+  ['Busca el juguete','Olfato',4,'Asocia «busca» con encontrar un objeto conocido.','Su juguete favorito y una caja abierta.',[
+    ['Busca','Enséñale el juguete y déjalo a la vista a un metro. Di «busca» y premia al llegar. Cambia de sitio entre tandas.','Se dirige al juguete con una señal y sin que lo apuntes.'],
+    ['Busca parcial','Deja parte del juguete visible detrás de la caja. Reduce la dificultad si pierde interés.','Encuentra el juguete parcialmente tapado.']]],
+  ['Suelta y deja','Autocontrol',4,'Practica dos respuestas distintas para objetos.','Juguete y premios pequeños.',[
+    ['Suelta','Deja quieto el juguete durante el juego y ofrece un intercambio. Marca al soltar. Cuando el intercambio sea fácil, añade «suelta» y devuelve el juguete algunas veces.','Suelta voluntariamente. Si protege el objeto, para y consulta con un veterinario de conducta.'],
+    ['Deja','Cierra un premio en el puño. Marca cuando aparte el hocico y premia con la otra mano. Añade «deja» cuando ya aparte el hocico con facilidad.','Se aparta del puño y vuelve a centrarse en ti.']]],
+  ['Quieto y manta','Autocontrol',4,'Introduce pausas cortas.','Manta y premios.',[
+    ['Quieto','Pide «sienta». Espera un segundo, premia en posición y di «libre». Si va bien, prueba tres segundos sin alejarte.','Mantiene la posición hasta «libre».'],
+    ['A tu sitio','Premia que se acerque a la manta y, después, que ponga las cuatro patas. Añade la señal cuando ya vaya con facilidad.','Sube a la manta y permanece un segundo.']]],
+  ['Busca sin ver el escondite','Olfato',4,'Deja que resuelva por su cuenta una búsqueda corta.','Juguete y habitación despejada.',[
+    ['Busca en una habitación','Esconde el juguete fuera de su vista, a ras de suelo y accesible. Entra con él, di «busca» una vez y evita mirar o señalar el escondite.','Lo encuentra sin que le digas dónde está. Si se atasca, vuelve a dejarlo medio visible.']]],
+  ['Junto y espera','Autocontrol',4,'Practica unos pasos al lado y una pausa en la puerta.','Premios y correa si la puerta da al exterior.',[
+    ['Junto','Da un paso y premia a la altura de tu pierna. Repite y prueba tres pasos. Termina con «libre».','Camina tres pasos a tu lado.'],
+    ['Espera','Abre unos centímetros. Si se mantiene donde está, premia y di «libre» para cruzar. Si se adelanta, abre menos en el siguiente intento.','Cruza después de «libre».']]],
+  ['Marca o trae','Olfato',5,'Elige cómo debe avisar de que encontró el objeto.','Juguete seguro y premios.',[
+    ['Marca','Si prefieres indicación pasiva, pon el juguete a la vista y pídele «sienta» al llegar. Premia junto al objeto. Retira esa ayuda cuando empiece a sentarse por su cuenta.','Se sienta junto al objeto. Puedes practicar esta opción o «Trae».'],
+    ['Trae','Si prefieres cobro, retrocede cuando coja el juguete. Premia que llegue cerca con él y añade «suelta» en la mano cuando ya vuelva con facilidad.','Vuelve con el objeto. Puedes practicar esta opción o «Marca».']]],
+  ['Alto y vamos','Autocontrol',4,'Practica detenerte y cambiar de dirección en calma.','Arnés y correa floja.',[
+    ['Alto','Caminad despacio. Di «alto», detente y premia cuando se pare. Si acierta, prueba con el perro un paso por delante y acércate tú a premiarlo.','Se para donde está. Practica lejos de carreteras.'],
+    ['Vamos','Di «vamos», gira 180 grados y premia cuando te siga. Prueba primero en un lugar sin distracciones.','Se gira y retoma la marcha contigo.']]],
+  ['Llamada de emergencia','Autocontrol',3,'Reserva una señal para cuando necesites una vuelta rápida.','Premio especialmente atractivo y correa larga en exterior.',[
+    ['Aquí ya','Desde un metro y en calma, di «¡aquí ya!». En cuanto llegue, dale varios premios pequeños seguidos. Haz una o dos repeticiones.','Vuelve enseguida. Amplía la distancia en otra sesión si la respuesta ya es estable.'],
+    ['Ven en otro sitio','Usa «ven» para la práctica diaria. En un lugar tranquilo, prueba desde dos metros con correa larga y termina con «libre».','Vuelve con una sola señal, sin tensar la correa.']]],
+  ['Distinguir el objeto','Olfato',5,'Busca el objeto correcto e indica dónde está o tráelo.','Dos cajas abiertas iguales, juguete y, más adelante, un objeto neutro.',[
+    ['Busca entre cajas','Esconde el juguete en una caja y deja vacía la otra. Alterna posiciones. Si acierta con facilidad, pon un objeto neutro en la otra caja.','Indica o trae el juguete aunque haya un objeto neutro.'],
+    ['Busca otro objeto','Si la búsqueda del juguete ya sale bien, puedes repetir la progresión con otro objeto seguro, por ejemplo un llavero que no vaya a coger. Usa «busca llaves» desde el primer ensayo con ese objetivo.','Localiza el nuevo objeto a la vista. Este ejercicio es opcional.']]],
+  ['Escondite a ciegas','Olfato',5,'Comprueba si puede buscar sin pistas tuyas.','Juguete y una persona que pueda esconderlo.',[
+    ['Busca a ciegas','Pide a alguien que coloque el juguete mientras esperáis fuera. Entra, da «busca» y espera la indicación o entrega. Si estás solo, haz un escondite nuevo en otra habitación y evita mirar hacia él.','Localiza el objeto y da la respuesta elegida.'],
+    ['Prueba sin objeto','Solo si encuentra el objetivo de forma consistente, intercala un ensayo corto sin objeto. Termina con «libre» y premia que vuelva junto a ti.','Durante la prueba no marca una caja vacía. Es opcional.']]],
+  ['Circuito final','Evaluación',5,'Identifica los ejercicios que puede hacer a la primera y los que toca repasar.','Manta, premios, objeto y recinto cerrado o correa larga.',[
+    ['Posiciones y puerta','Pide «espera», cruza con «libre», camina tres pasos en «junto» y enlaza «sienta», «tumba» y «quieto» de hasta diez segundos.','Anota las señales a las que respondió a la primera.'],
+    ['Busca e indica','Prepara un escondite sencillo con el objeto preferido. Da un máximo de dos minutos y premia la indicación correcta o la entrega.','Localiza el objeto dentro del tiempo y muestra dónde está o lo trae.'],
+    ['Control y calma','Pide «alto» a corta distancia. En otro intento, llama con «ven». Cierra con «a tu sitio» y unos segundos tranquilos.','Se para, vuelve y se instala en la manta.']]]
+];
+
+const $ = (id) => document.getElementById(id);
+const key = 'entrena-perros:v1';
+const empty = () => ({version:1, day:0, days:{}, sound:false});
+let storageAvailable = true;
+let state = empty();
+try {
+  const saved = localStorage.getItem(key);
+  if (saved) state = validate(JSON.parse(saved));
+} catch {
+  storageAvailable = false;
+}
+let day = state.day;
+let view = 'today';
+let audio;
+let timerStart = null;
+let elapsed = 0;
+let lastCount = null;
+
+function validate(data) {
+  if (!data || data.version !== 1 || !Number.isInteger(data.day) || !plan[data.day] ||
+      typeof data.sound !== 'boolean' || !data.days || typeof data.days !== 'object' || Array.isArray(data.days)) {
+    throw new Error('Copia incompatible');
+  }
+  const clean = {version:1, day:data.day, sound:data.sound, days:{}};
+  for (const [id, entry] of Object.entries(data.days)) {
+    const index = Number(id);
+    if (String(index) !== id || !plan[index] || !entry || !['pending','done','repeat'].includes(entry.status) ||
+        !Number.isSafeInteger(entry.rewards) || entry.rewards < 0 || typeof entry.notes !== 'string' ||
+        entry.notes.length > 400 || !Array.isArray(entry.scores) || entry.scores.length !== plan[index][5].length ||
+        !Array.isArray(entry.sessions) || !entry.sessions.every((session) =>
+          session && ['done','repeat'].includes(session.status) && typeof session.date === 'string' && Number.isFinite(Date.parse(session.date)) &&
+          Number.isSafeInteger(session.seconds) && session.seconds >= 0)) throw new Error('Copia incompatible');
+    if (!entry.scores.every((pair) => Array.isArray(pair) && pair.length === 2 &&
+        pair.every((number) => Number.isSafeInteger(number) && number >= 0))) throw new Error('Copia incompatible');
+    clean.days[id] = entry;
+  }
+  return clean;
+}
+
+function record(index = day) {
+  state.days[index] ??= {status:'pending', rewards:0, notes:'', scores:plan[index][5].map(() => [0,0]), sessions:[]};
+  return state.days[index];
+}
+
+function persist() {
+  try {
+    localStorage.setItem(key, JSON.stringify(state));
+    storageAvailable = true;
+  } catch {
+    storageAvailable = false;
+  }
+  return storageAvailable;
+}
+
+function element(tag, value, className) {
+  const node = document.createElement(tag);
+  if (value) node.textContent = value;
+  if (className) node.className = className;
+  return node;
+}
+
+function button(label, act, accessibleLabel) {
+  const node = element('button', label, 'btn');
+  if (accessibleLabel) node.setAttribute('aria-label', accessibleLabel);
+  node.addEventListener('click', act);
+  return node;
+}
+
+function updateProgress() {
+  const completed = Object.values(state.days).filter((item) => item.status === 'done').length;
+  $('progressText').textContent = completed + ' / ' + plan.length;
+  $('progressBar').value = completed;
+  $('dayNumber').textContent = 'Día ' + (day + 1) + ' de ' + plan.length;
+}
+
+function updateScore(output, pair) {
+  const total = pair[0] + pair[1];
+  output.textContent = pair[0] + ' de ' + total + ' a la primera' + (total ? ' · ' + Math.round(pair[0] / total * 100) + ' %' : '');
+}
+
+function renderExercises(exercises) {
+  $('exercises').replaceChildren();
+  for (const [index,[name, instructions, criterion]] of exercises.entries()) {
+    const card = element('article', '', 'exercise');
+    const details = element('details');
+    details.append(element('summary','Criterio de acierto'), element('p',criterion));
+    const row = element('div','','row');
+    const score = element('output','','score');
+    score.setAttribute('aria-live','polite');
+    const counts = record().scores[index];
+    const undo = button('Deshacer', () => {
+      if (lastCount?.day !== day || lastCount.index !== index) return;
+      counts[lastCount.result]--;
+      lastCount = null;
+      updateScore(score,counts);
+      updateUndo();
+      persist();
+    }, 'Deshacer último intento de ' + name);
+    undo.dataset.undo = index;
+    const add = (result) => {
+      counts[result]++;
+      lastCount = {day,index,result};
+      updateScore(score, counts);
+      updateUndo();
+      if (!persist()) $('feedback').textContent = 'El navegador no ha guardado los cambios. Puedes exportarlos desde Registro.';
+    };
+    row.append(button('Acierto',() => add(0),'Acierto en ' + name),
+      button('Con ayuda o fallo',() => add(1),'Con ayuda o fallo en ' + name),undo,score);
+    card.append(element('h3',name),element('p',instructions),details,row);
+    $('exercises').append(card);
+    updateScore(score,counts);
+  }
+  updateUndo();
+}
+
+function updateUndo() {
+  for (const undo of document.querySelectorAll('[data-undo]')) {
+    undo.disabled = lastCount?.day !== day || lastCount.index !== Number(undo.dataset.undo);
+  }
+}
+
+function renderDay() {
+  const [title,phase,minutes,goal,equipment,exercises] = plan[day];
+  const entry = record();
+  $('phase').textContent = phase;
+  $('dayTitle').textContent = title;
+  $('dayGoal').textContent = goal;
+  $('equipment').textContent = 'Prepara: ' + equipment;
+  $('timerTarget').textContent = 'Tiempo previsto: ' + minutes + ' min.';
+  $('prev').disabled = day === 0;
+  $('next').disabled = day === plan.length - 1;
+  $('notes').value = entry.notes;
+  $('sound').checked = state.sound;
+  $('feedback').textContent = !storageAvailable ? 'Almacenamiento pendiente de verificar. Puedes exportar una copia desde Registro.' :
+    {pending:'', done:'Día completado. Puedes volver a practicar cualquier ejercicio.', repeat:'Guardado para repetir.'}[entry.status];
+  renderExercises(exercises);
+  updateProgress();
+  updateRewards();
+  updateTimer();
+}
+
+function showView(target) {
+  view = target;
+  for (const nav of document.querySelectorAll('[data-view]')) {
+    if (nav.dataset.view === view) nav.setAttribute('aria-current','page');
+    else nav.removeAttribute('aria-current');
+  }
+  for (const name of ['today','plan','log']) $(name).hidden = view !== name;
+  if (view === 'plan') renderPlan();
+  if (view === 'log') renderLog();
+}
+
+function selectDay(index) {
+  if (!plan[index]) return;
+  if (index !== day && timeSpent() > 0 && !window.confirm('Cambiar de día reinicia el cronómetro. ¿Continuar?')) return;
+  if (index !== day) {
+    elapsed = 0;
+    timerStart = null;
+    lastCount = null;
+  }
+  day = index;
+  state.day = day;
+  renderDay();
+  persist();
+  showView('today');
+}
+
+function renderPlan() {
+  $('days').replaceChildren();
+  plan.forEach(([title,phase,time],index) => {
+    const status = {done:'Completado',repeat:'Repetir',pending:'Pendiente'}[state.days[index]?.status ?? 'pending'];
+    const card = button('',() => { selectDay(index); if (view === 'today') window.scrollTo(0,0); });
+    card.className = 'daycard';
+    card.append(element('span','Día ' + (index+1) + ' · ' + phase + ' · ' + time + ' min'),element('strong',title),element('span',status));
+    $('days').append(card);
+  });
+}
+
+function timeSpent() {
+  return elapsed + (timerStart === null ? 0 : performance.now() - timerStart);
+}
+
+function updateTimer() {
+  const seconds = Math.floor(timeSpent() / 1000);
+  $('clock').textContent = [Math.floor(seconds / 60), seconds % 60].map((part) => String(part).padStart(2,'0')).join(':');
+  $('timerToggle').textContent = timerStart !== null ? 'Pausar' : elapsed > 0 ? 'Reanudar' : 'Iniciar';
+}
+
+function updateRewards() {
+  const rewards = record().rewards;
+  $('rewardCount').textContent = rewards + (rewards === 1 ? ' premio' : ' premios');
+  $('undoReward').disabled = rewards === 0;
+}
+
+function playMarker() {
+  const Audio = window.AudioContext || window.webkitAudioContext;
+  if (!Audio) return;
+  try {
+    audio ??= new Audio();
+    audio.resume().catch(() => {});
+    const tone = audio.createOscillator();
+    const volume = audio.createGain();
+    const now = audio.currentTime;
+    tone.frequency.value = 550;
+    volume.gain.setValueAtTime(.14,now);
+    volume.gain.exponentialRampToValueAtTime(.001,now+.09);
+    tone.connect(volume).connect(audio.destination);
+    tone.start(now);
+    tone.stop(now+.1);
+  } catch {
+    $('feedback').textContent = 'El sonido no está disponible. Usa «sí» como marcador.';
+  }
+}
+
+function finish(status) {
+  const entry = record();
+  const seconds = Math.floor(timeSpent()/1000);
+  const signature = JSON.stringify([entry.notes,entry.scores,entry.rewards,status]);
+  if (entry.sessions.at(-1)?.signature === signature && !seconds) {
+    $('feedback').textContent = 'Esta sesión ya está guardada. Registra los nuevos intentos o inicia el cronómetro para guardar otra.';
+    return;
+  }
+  entry.status = status;
+  entry.notes = $('notes').value;
+  entry.sessions.push({status,date:new Date().toISOString(),seconds,signature});
+  timerStart = null;
+  elapsed = 0;
+  updateTimer();
+  updateProgress();
+  const saved = persist();
+  const low = entry.scores.some(([hits,misses]) => (hits + misses >= 3 && hits / (hits + misses) < .8));
+  $('feedback').textContent = !saved ? 'La sesión sigue en memoria. Exporta una copia desde Registro.' : status === 'repeat'
+    ? 'Guardado. Repite con menos distancia, menos tiempo o menos distracciones.'
+    : low ? 'Día completado. Repasa los ejercicios con más fallos antes de subir su dificultad.'
+    : 'Día completado. Puedes pasar al siguiente o repetir este cuando lo necesites.';
+}
+
+function renderLog() {
+  const history = $('history');
+  history.replaceChildren();
+  const entries = Object.entries(state.days).filter(([,entry]) =>
+    entry.sessions.length || entry.rewards || entry.notes || entry.scores.some(([hits,misses]) => hits + misses));
+  if (!entries.length) history.append(element('p','Todavía no hay prácticas registradas.'));
+  for (const [index,entry] of entries.reverse()) {
+    const card = element('article','','panel');
+    card.append(element('h2','Día ' + (Number(index)+1) + ' · ' + plan[index][0]));
+    card.append(element('p',entry.rewards + ' premios · ' + entry.sessions.length + ' sesiones guardadas'));
+    const list = element('ul','','history');
+    entry.scores.forEach(([hits,misses], exercise) => {
+      if (hits + misses) list.append(element('li',plan[index][5][exercise][0] + ': ' + hits + ' de ' + (hits+misses) + ' a la primera'));
+    });
+    for (const session of entry.sessions.slice().reverse()) {
+      const date = new Date(session.date).toLocaleString('es-ES',{dateStyle:'short',timeStyle:'short'});
+      const duration = Math.floor(session.seconds/60) + ' min ' + (session.seconds%60) + ' s';
+      list.append(element('li',date + ' · ' + duration + ' · ' + (session.status === 'done' ? 'Completado' : 'Para repetir')));
+    }
+    card.append(list);
+    if (entry.notes) card.append(element('p',entry.notes));
+    card.append(button('Abrir día',() => selectDay(Number(index))));
+    history.append(card);
+  }
+}
+
+for (const nav of document.querySelectorAll('[data-view]')) nav.addEventListener('click',() => showView(nav.dataset.view));
+$('prev').addEventListener('click',() => selectDay(day-1));
+$('next').addEventListener('click',() => selectDay(day+1));
+$('timerToggle').addEventListener('click',() => {
+  if (timerStart === null) timerStart = performance.now();
+  else {
+    elapsed = timeSpent();
+    timerStart = null;
+  }
+  updateTimer();
+});
+$('timerReset').addEventListener('click',() => {
+  elapsed = 0;
+  timerStart = null;
+  updateTimer();
+});
+$('reward').addEventListener('click',() => {
+  if (state.sound) playMarker();
+  record().rewards++;
+  updateRewards();
+  if (!persist()) $('feedback').textContent = 'No se ha guardado el premio en este navegador. Puedes exportar una copia.';
+});
+$('undoReward').addEventListener('click',() => {
+  if (record().rewards) record().rewards--;
+  updateRewards();
+  persist();
+});
+$('sound').addEventListener('change',() => {
+  state.sound = $('sound').checked;
+  persist();
+});
+$('notes').addEventListener('input',() => {
+  record().notes = $('notes').value;
+  persist();
+});
+$('finish').addEventListener('click',() => finish('done'));
+$('repeat').addEventListener('click',() => finish('repeat'));
+$('export').addEventListener('click',() => {
+  const url = URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));
+  const link = element('a');
+  link.href = url;
+  link.download = 'a-la-pista-progreso.json';
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url),1000);
+});
+$('importButton').addEventListener('click',() => $('importFile').click());
+$('importFile').addEventListener('change',async () => {
+  const [file] = $('importFile').files;
+  $('importFile').value = '';
+  if (!file) return;
+  try {
+    const imported = validate(JSON.parse(await file.text()));
+    if (!window.confirm('La copia sustituirá el progreso de este navegador y reiniciará el cronómetro. ¿Continuar?')) return;
+    state = imported;
+    day = state.day;
+    elapsed = 0;
+    timerStart = null;
+    lastCount = null;
+    const saved = persist();
+    renderDay();
+    renderLog();
+    $('importStatus').textContent = saved ? 'Copia importada.' : 'Copia abierta en memoria. El navegador no ha podido guardarla.';
+  } catch {
+    $('importStatus').textContent = 'El archivo no es una copia válida de A la pista.';
+  }
+});
+renderDay();
+setInterval(() => { if (timerStart !== null) updateTimer(); }, 250);
+</script>
+</body>
+</html>
