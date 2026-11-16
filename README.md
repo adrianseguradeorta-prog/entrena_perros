@@ -1,13 +1,12 @@
 # A la pista
 
-Aplicación web de entrenamiento canino. El plan exprés propone 14 días de práctica, con una sesión diaria de 3 a 5 minutos, para introducir obediencia, búsqueda de objetos y autocontrol.
+Aplicación web de entrenamiento canino estilo K9, con obediencia, búsqueda de objetos y control a distancia.
 
-La app incluye instrucciones, criterios de acierto, cronómetro, marcador de recompensa con sonido opcional y registro de ejercicios. Los datos se guardan en el navegador. La sección Registro permite exportar una copia JSON e importarla en otro navegador.
+- **Rápido**. 14 días de 3 a 5 minutos con instrucciones breves para ir directamente a la práctica.
+- **Detallado**. 14 días de 6 a 10 minutos con preparación, ejercicios paso a paso, recompensas y ajustes por dificultad.
 
-## Abrir la app
+La pantalla inicial permite elegir modo y consultar el avance de cada uno. Se guardan por separado el día, los intentos, los premios, las notas y el historial de sesiones. El progreso de la primera versión se conserva en el modo rápido. Una copia JSON nueva incluye ambos modos. Una copia antigua se importa en el modo rápido.
 
-Abre `index.html` en un navegador moderno. No necesita instalar paquetes ni ejecutar una compilación.
+## Abrir la aplicación
 
-## Publicar en GitHub Pages
-
-En **Settings → Pages**, selecciona **Deploy from a branch**, la rama **main** y la carpeta **/ (root)**. Pulsa **Save**. Cuando termine el despliegue, GitHub mostrará la URL pública en esa misma sección.
+Entra en [A la pista](https://adrianseguradeorta-prog.github.io/entrena_perros/) o abre `index.html` en un navegador moderno. No necesita compilación. Los datos se guardan en el navegador con el que entrenas.
