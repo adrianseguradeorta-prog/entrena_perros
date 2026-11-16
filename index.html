@@ -14,16 +14,30 @@ main{padding:28px 0 48px}.hero{background:var(--green);color:#fffdf4;border-radi
 .daynav{display:flex;align-items:center;justify-content:space-between;margin:20px 0 12px;gap:8px}.daynav strong{text-align:center}.grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:16px;align-items:start}.panel{background:var(--paper);border:1px solid var(--edge);border-radius:18px;padding:clamp(15px,3vw,25px)}.panel h2{line-height:1.15;margin:0 0 10px;letter-spacing:-.035em}.panel p{margin:0 0 12px}.muted,small{color:var(--muted)}.exercise{border-top:1px solid var(--edge);padding:15px 0}.exercise:last-child{padding-bottom:0}.exercise h3{margin:0 0 5px}.exercise p{margin:0 0 8px}.exercise details{margin:7px 0 12px;color:var(--muted)}summary{cursor:pointer;font-weight:700}.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.btn{padding:8px 12px;border:1px solid #bdcbbd;border-radius:9px;background:transparent;min-height:44px;font-weight:730}.btn:hover{background:#edf3e2}.primary{background:var(--lime);border-color:#acc050}.primary:hover{background:#e6f8a3}.wide{width:100%}.clock{font-size:clamp(2.65rem,8vw,3.75rem);font-weight:830;line-height:1.2;letter-spacing:-.065em;font-variant-numeric:tabular-nums}.tools{display:grid;gap:12px}.tools fieldset{border:0;border-top:1px solid var(--edge);padding:10px 0 0;margin:0;min-width:0}.tools legend{font-weight:750;padding-right:8px}.notes{max-width:650px;margin-top:16px}.notes textarea{display:block;width:100%;margin:8px 0;min-height:76px;padding:9px;border:1px solid #bdcbbd;border-radius:8px;background:white}.stack{display:grid;gap:10px}.daylist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.daycard{text-align:left;padding:14px;background:var(--paper);border:1px solid var(--edge);border-radius:12px}.daycard:hover{border-color:#638164}.daycard strong,.daycard span{display:block}.daycard span{font-size:.8rem;color:var(--muted)}.status{min-height:1.5em;color:var(--muted);margin:10px 0 0}.score{font-size:.83rem;color:var(--muted);font-variant-numeric:tabular-nums}.foot{margin-top:16px}.feedback{margin-top:16px}.history{padding-left:20px}.history li{margin:5px 0}[hidden]{display:none!important}
 @media(max-width:700px){.grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr;gap:14px}.hero .meter{padding:10px 14px}.meter strong{font-size:1.55rem}.top{flex-wrap:wrap;gap:3px;padding:7px 0}.top button{padding:7px}.daynav .btn{padding:6px 8px}}
 @media(max-width:370px){.daylist{grid-template-columns:1fr}}
+.mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+.mode-card{display:flex;flex-direction:column;gap:8px;align-items:flex-start;text-align:left;width:100%;min-height:168px;color:var(--green)}
+.mode-card:hover{border-color:#638164}.mode-card strong{font-size:1.35rem}.mode-card small:last-child{margin-top:auto}
+#modeBadge{margin-top:14px;color:var(--lime);font-weight:750}.steps{padding-left:22px;margin:8px 0 12px}.steps li+li{margin-top:5px}
+#sessionBrief{padding:10px 12px;border-radius:8px;background:#edf3e2}
+@media(max-width:600px){.mode-grid{grid-template-columns:1fr}.mode-card{min-height:124px}}
 </style>
 </head>
 <body>
-<header><div class="top"><div class="brand">A la pista</div><nav aria-label="Secciones"><button data-view="today" aria-current="page">Sesión</button><button data-view="plan">Plan</button><button data-view="log">Registro</button></nav></div></header>
+<header><div class="top"><div class="brand">A la pista</div><nav id="workspaceNav" aria-label="Secciones" hidden><button id="changeMode">Cambiar modo</button><button data-view="today" aria-current="page">Sesión</button><button data-view="plan">Plan</button><button data-view="log">Registro</button></nav></div></header>
 <main>
-<section id="today" aria-label="Sesión">
-<div class="hero"><div><div id="phase" class="eyebrow"></div><h1 id="dayTitle"></h1><p id="dayGoal"></p></div><div class="meter"><strong id="progressText"></strong><span>días practicados</span><progress id="progressBar" max="14" aria-label="Días practicados"></progress></div></div>
+<section id="chooseMode" aria-labelledby="chooseTitle">
+<div class="hero"><div><div class="eyebrow">Entrenamiento K9</div><h1 id="chooseTitle" tabindex="-1">Elige tu rutina</h1><p>Practica obediencia, búsqueda de objetos y control a distancia.</p></div></div>
+<div class="mode-grid">
+<button class="panel mode-card" id="quickMode" data-mode="quick"><strong>Modo rápido</strong><span>14 días · 3 a 5 min al día</span><small>Instrucciones breves y práctica directa.</small><small id="quickProgress"></small></button>
+<button class="panel mode-card" id="detailedMode" data-mode="detailed"><strong>Modo detallado</strong><span>14 días · 6 a 10 min al día</span><small>Ejercicios paso a paso, pautas de recompensa y formas de subir o bajar la dificultad.</small><small id="detailedProgress"></small></button>
+</div>
+<p class="muted">Cada modo conserva su propio progreso en este navegador.</p>
+</section>
+<section id="today" aria-label="Sesión" hidden>
+<div class="hero"><div><div id="phase" class="eyebrow"></div><h1 id="dayTitle"></h1><p id="dayGoal"></p><div id="modeBadge"></div></div><div class="meter"><strong id="progressText"></strong><span>días practicados</span><progress id="progressBar" max="14" aria-label="Días practicados"></progress></div></div>
 <div class="daynav"><button id="prev" class="btn">← Anterior</button><strong id="dayNumber"></strong><button id="next" class="btn">Siguiente →</button></div>
 <div class="grid">
-<section class="panel"><h2>Ejercicios</h2><p id="equipment" class="muted"></p><div id="exercises"></div></section>
+<section class="panel"><h2>Ejercicios</h2><p id="equipment" class="muted"></p><p id="sessionBrief" hidden></p><div id="exercises"></div></section>
 <aside class="panel tools" aria-label="Herramientas">
 <div><h2>Cronómetro</h2><div id="clock" class="clock" role="timer">00:00</div><div class="row"><button id="timerToggle" class="btn">Iniciar</button><button id="timerReset" class="btn">Reiniciar</button></div><small id="timerTarget"></small></div>
 <fieldset><legend>Premiar</legend><button class="btn primary wide" id="reward">Marcar y contar premio</button><div class="row"><small id="rewardCount"></small><button id="undoReward" class="btn">Deshacer</button></div><label><input id="sound" type="checkbox"> Sonido opcional</label><div><small>Di «sí» justo al acertar y entrega enseguida comida o juego. Si activas el sonido, úsalo como marcador y entrega el premio igual.</small></div></fieldset>
@@ -31,8 +45,8 @@ main{padding:28px 0 48px}.hero{background:var(--green);color:#fffdf4;border-radi
 </div>
 <section class="panel feedback"><h2>Cerrar la sesión</h2><label for="notes">Nota de la práctica</label><div class="notes"><textarea id="notes" rows="2" maxlength="400" placeholder="Lugar, distracción o ajuste para la próxima vez"></textarea></div><div class="row"><button id="finish" class="btn primary">Guardar y completar día</button><button id="repeat" class="btn">Guardar para repetir</button></div><p id="feedback" class="status" role="status"></p></section>
 </section>
-<section id="plan" hidden><h1 class="view-title">Plan exprés</h1><p>14 días, una sesión de 3 a 5 minutos al día. El recorrido suma 56 minutos de práctica prevista. Empieza en casa y cambia solo una dificultad cada vez. Si hay dos fallos seguidos, acorta la distancia o simplifica el ejercicio.</p><div id="days" class="daylist"></div><div class="panel foot"><h2>Después de los 14 días</h2><p>Para subir un nivel, busca al menos 8 aciertos de 10 en dos prácticas distintas. Puedes repartir los intentos en tandas cortas. Mantén lo aprendido con dos búsquedas semanales y pequeñas prácticas de llamada y espera durante los paseos.</p><p>Material básico: premios pequeños, manta, juguete seguro y arnés con correa larga para trabajar distancia en un lugar despejado. Entrena con premios, juego y pausas.</p><p><a href="https://avsab.org/resources/position-statements/">Guía de la AVSAB sobre entrenamiento con recompensas</a></p></div></section>
-<section id="log" hidden><h1 class="view-title">Registro</h1><p>Los datos se guardan en este navegador. Exporta una copia si vas a cambiar de dispositivo.</p><div class="row"><button id="export" class="btn">Exportar copia</button><button id="importButton" class="btn">Importar copia</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><p id="importStatus" class="status" role="status"></p><div id="history" class="stack"></div></section>
+<section id="plan" hidden><h1 id="planTitle" class="view-title"></h1><p id="planDescription"></p><div id="days" class="daylist"></div><div class="panel foot"><h2>Después de los 14 días</h2><p>Para subir un nivel, busca al menos 8 aciertos de 10 en dos prácticas distintas. Puedes repartir los intentos en tandas cortas. Mantén lo aprendido con dos búsquedas semanales y pequeñas prácticas de llamada y espera durante los paseos.</p><p>Material básico: premios pequeños, manta, juguete seguro y arnés con correa larga para trabajar distancia en un lugar despejado. Entrena con premios, juego y pausas.</p><p><a href="https://avsab.org/resources/position-statements/">Guía de la AVSAB sobre entrenamiento con recompensas</a></p></div></section>
+<section id="log" hidden><h1 class="view-title">Registro</h1><p>Aquí se muestra el registro del modo que tienes abierto. La copia incluye ambos modos.</p><div class="row"><button id="export" class="btn">Exportar copia</button><button id="importButton" class="btn">Importar copia</button><input id="importFile" type="file" accept=".json,application/json" hidden></div><p id="importStatus" class="status" role="status"></p><div id="history" class="stack"></div></section>
 </main>
 <script>
 'use strict';
@@ -82,25 +96,82 @@ const plan = [
     ['Control y calma','Pide «alto» a corta distancia. En otro intento, llama con «ven». Cierra con «a tu sitio» y unos segundos tranquilos.','Se para, vuelve y se instala en la manta.']]]
 ];
 
+const detailed = [
+  [6,'Prepara una zona tranquila. Haz una tanda por ejercicio, con una pausa breve entre ambas.',[
+    ['Sitúate a un paso cuando esté tranquilo. Di su nombre una sola vez.','Marca el primer giro de cabeza con «sí» y entrega el premio junto a ti.','Haz tres repeticiones. Si mira a otro sitio, espera a que baje la distracción antes de probar otra vez.'],
+    ['Desde de pie, mueve un premio desde su nariz ligeramente hacia arriba. Marca cuando se siente.','Repite con la mano vacía y premia con la otra. Cuando siga ese gesto con facilidad, di «sienta» justo antes de hacerlo.','Reduce el gesto en otro intento. Si se levanta, reinicia con el perro de pie.']]],
+  [6,'Practica en una alfombra. Haz dos o tres repeticiones cortas de cada ejercicio.',[
+    ['Baja el premio hasta el suelo entre sus patas y muévelo un poco hacia delante.','Marca cuando apoye los codos y entrega el premio a ras de suelo. Prueba después con la mano vacía.','Cuando siga el gesto con soltura, di «tumba» antes del movimiento.'],
+    ['En «sienta» o «tumba», premia tras un segundo sin moverse.','Di «libre» y da un paso para invitarlo a salir. Marca y premia cuando te siga.','Alterna las dos posiciones en tandas posteriores.']]],
+  [6,'Usa un pasillo tranquilo. Reserva un premio que le guste especialmente para la llamada.',[
+    ['Desde uno o dos metros, di «ven» una vez y retrocede dos pasos.','Marca al llegar a tus pies y premia cerca de tu cuerpo. Di «libre» para que vuelva a explorar.','Cambia tu posición y repite. Si le cuesta, vuelve a medio metro.'],
+    ['Muestra tu palma abierta a pocos centímetros de su hocico.','Marca el contacto y premia con la otra mano. Retira y vuelve a presentar la palma.','Di «toca» antes de mostrarla cuando el contacto sea previsible.']]],
+  [7,'Usa un juguete conocido. Entre intentos, deja que se aleje mientras vuelves a colocar el objeto.',[
+    ['Juega unos segundos y coloca el juguete a la vista a un metro.','Di «busca» y espera. Marca cuando llegue al juguete y juega brevemente como premio.','Cambia la ubicación y mantén las manos quietas al dar la señal.'],
+    ['Deja parte del juguete visible detrás de una caja.','Di «busca» desde el mismo punto de partida y deja que se acerque por su cuenta.','Si tiene dificultad, aumenta la parte visible, premia el hallazgo y acaba con ese intento.']]],
+  [7,'Usa un juguete que ya intercambie con comodidad. Deja espacio para que pueda apartarse.',[
+    ['Juega un momento y deja el juguete quieto. Ofrece un premio en intercambio.','Marca al soltar y entrega el premio. Si sigue tranquilo, devuélvele el juguete.','Cuando el intercambio sea previsible, di «suelta» un instante antes de ofrecerlo. Si se tensa o protege el objeto, termina la práctica.'],
+    ['Cierra un premio en el puño y deja que lo huela.','Marca cuando se aparte y da otro premio con la mano libre.','Añade «deja» cuando apartar el hocico sea previsible. En otra sesión, prueba con un objeto neutro fuera de su alcance.']]],
+  [7,'Trabaja la duración con el perro cerca. Usa «libre» para terminar cada permanencia.',[
+    ['Pide «sienta». Espera un segundo, premia en posición y di «libre».','Prueba tres segundos si el anterior fue fácil. Alterna un intento más largo con uno fácil.','Cuando mantenga el tiempo con soltura, ensaya un paso atrás y vuelve a su lado para premiar.'],
+    ['Pon la manta cerca y premia que se acerque. Después, espera a que suba con las cuatro patas y premia encima.','Añade «a tu sitio» justo antes de subir cuando ese movimiento sea previsible.','Premia unos segundos de calma en la manta y termina con «libre».']]],
+  [8,'Haz dos o tres búsquedas cortas. Usa escondites accesibles y retira objetos frágiles.',[
+    ['Esconde el juguete a ras de suelo mientras el perro espera fuera contigo o con otra persona.','Entra, di «busca» y deja que explore. Mantén la mirada y las manos neutrales.','Marca al encontrarlo y premia con juego. Cambia de escondite. Si se atasca, prepara un intento en el que se vea parte del objeto.']]],
+  [7,'Usa un recinto cerrado o correa junto a la puerta de salida. Mantén cortas ambas tandas.',[
+    ['Elige un lado. Da un paso y entrega el premio junto a esa pierna.','Cuando te acompañe, di «junto» antes de arrancar. Pasa a tres pasos y luego a un giro sencillo.','Usa «libre» para volver al paseo normal.'],
+    ['En una puerta interior, abre unos centímetros. Marca si espera y premia donde está.','Di «libre» para cruzar. Si se adelanta, reduce la apertura en el siguiente intento.','Cuando espere con facilidad, aumenta poco a poco la apertura de la puerta.']]],
+  [8,'Elige una respuesta final para la búsqueda. Practícala con el objeto a la vista antes de esconderlo.',[
+    ['Si eliges indicación pasiva, pon el objeto a la vista y pide «sienta» al llegar junto a él.','Marca y premia cerca del objeto. Cuando empiece a sentarse por iniciativa propia, retira la señal de sentado.','Une la indicación a una búsqueda con el juguete parcialmente visible.'],
+    ['Si eliges cobro, usa un juguete que coja con gusto. Retrocede cuando lo tenga en la boca.','Marca que se acerque y premia. Añade la entrega en mano con «suelta» cuando ya vuelva con soltura.','Únelo a «busca» con un escondite fácil. Practica solo la respuesta final que hayas elegido.']]],
+  [8,'Practica con arnés y correa floja, lejos del tráfico. Empieza al paso y con poco espacio entre ambos.',[
+    ['Da «alto» mientras camináis juntos y detente. Marca cuando pare y premia en ese punto.','Cuando responda, ensaya con el perro un paso por delante. Acércate tú a premiar donde se haya parado.','Añade distancia en tandas posteriores solo si se detiene con facilidad cerca de ti.'],
+    ['Di «vamos», gira media vuelta y marca cuando se incorpore a tu paso.','Premia al retomar la marcha y practica un giro hacia cada lado.','Si hay una distracción, aumenta la distancia hasta que pueda seguirte al oír la señal.']]],
+  [6,'Practica una o dos llamadas especiales. Dedica el resto de la sesión a la llamada cotidiana con correa larga.',[
+    ['Escoge una señal rara, por ejemplo «¡aquí ya!». A un metro, di la señal cuando esté receptivo.','Al llegar, dale varios trocitos seguidos y vuelve a darle permiso para explorar.','Usa la señal en prácticas puntuales y aumenta la distancia de forma gradual en un lugar despejado.'],
+    ['Con correa larga, prueba «ven» desde dos metros en un lugar tranquilo.','Marca al llegar y premia. En alguna repetición, toca suavemente el arnés antes de decir «libre».','Si la distracción es demasiado fuerte, aléjate de ella o vuelve a practicar más cerca.']]],
+  [9,'Haz tres o cuatro intentos y cambia la caja que contiene el objetivo. Manipula todas las cajas de forma parecida.',[
+    ['Coloca el juguete en una de dos cajas abiertas iguales. Da «busca».','Premia la indicación o entrega del objetivo. Recoloca las cajas fuera de su vista.','Si encuentra el objetivo con soltura, pon un objeto neutro seguro en la otra caja.'],
+    ['De forma opcional, presenta un segundo objetivo seguro y usa una señal específica, por ejemplo «busca llaves».','Empieza a la vista. Marca una indicación tranquila cerca del objeto.','Introduce un escondite sencillo en sesiones posteriores, cuando ya responda bien a esa señal.']]],
+  [9,'Pide a otra persona que prepare escondites cortos. Quédate fuera mientras los coloca.',[
+    ['Entra con el perro y da «busca». Recorre la zona dejando que trabaje a su ritmo.','Pide a quien escondió el juguete que confirme el lugar cuando el perro indique o entregue el objetivo.','Si practicas solo, usa un escondite nuevo y evita mirar hacia él. Reserva la prueba a ciegas para otro día.'],
+    ['Haz este ejercicio solo si identifica el objetivo de forma consistente. Prepara una zona sin el juguete.','Acota el tiempo antes de empezar. Al terminar, di «libre» y premia que vuelva contigo.','Anota si indicó un lugar vacío. El siguiente ensayo puede ser un hallazgo fácil.']]],
+  [10,'Monta el circuito en un recinto cerrado o con correa. Divide la práctica en bloques si necesitas una pausa.',[
+    ['Pide «espera» en la puerta, cruza con «libre» y camina tres pasos en «junto».','Haz «sienta», «tumba» y «quieto» hasta diez segundos si ya los sostiene. Vuelve para premiar.','Anota qué señales respondió a la primera.'],
+    ['Pide a otra persona que esconda el juguete o usa un escondite sencillo.','Da «busca» una vez y deja hasta dos minutos en una zona pequeña.','Premia el hallazgo cuando indique o entregue el objetivo. Anota dónde lo encontró.'],
+    ['Prueba «alto» a corta distancia. Premia donde se detenga.','En un intento aparte, haz una llamada corta. Cierra con calma en la manta.','Elige un ejercicio para repasar la próxima vez a la distancia que ya domine.']]]
+];
+
+const tracks = {quick:'Rápido', detailed:'Detallado'};
+
 const $ = (id) => document.getElementById(id);
 const key = 'entrena-perros:v1';
-const empty = () => ({version:1, day:0, days:{}, sound:false});
+const emptyTrack = () => ({version:1, day:0, days:{}, sound:false});
+const emptyProgress = () => ({version:2, tracks:{quick:emptyTrack(), detailed:emptyTrack()}});
 let storageAvailable = true;
-let state = empty();
+let progress = emptyProgress();
 try {
   const saved = localStorage.getItem(key);
-  if (saved) state = validate(JSON.parse(saved));
+  if (saved) progress = validateProgress(JSON.parse(saved));
 } catch {
   storageAvailable = false;
 }
+let mode = 'quick';
+let state = progress.tracks[mode];
 let day = state.day;
-let view = 'today';
+let view = 'chooseMode';
+const pausedTimers = {quick:0, detailed:0};
 let audio;
 let timerStart = null;
 let elapsed = 0;
 let lastCount = null;
 
-function validate(data) {
+function validateProgress(data) {
+  if (data?.version === 1) return {version:2, tracks:{quick:validateTrack(data), detailed:emptyTrack()}};
+  if (data?.version !== 2 || !data.tracks) throw new Error('Copia incompatible');
+  return {version:2, tracks:{quick:validateTrack(data.tracks.quick), detailed:validateTrack(data.tracks.detailed)}};
+}
+
+function validateTrack(data) {
   if (!data || data.version !== 1 || !Number.isInteger(data.day) || !plan[data.day] ||
       typeof data.sound !== 'boolean' || !data.days || typeof data.days !== 'object' || Array.isArray(data.days)) {
     throw new Error('Copia incompatible');
@@ -128,7 +199,7 @@ function record(index = day) {
 
 function persist() {
   try {
-    localStorage.setItem(key, JSON.stringify(state));
+    localStorage.setItem(key, JSON.stringify(progress));
     storageAvailable = true;
   } catch {
     storageAvailable = false;
@@ -150,8 +221,12 @@ function button(label, act, accessibleLabel) {
   return node;
 }
 
+function completedDays(track) {
+  return Object.values(track.days).filter((item) => item.status === 'done').length;
+}
+
 function updateProgress() {
-  const completed = Object.values(state.days).filter((item) => item.status === 'done').length;
+  const completed = completedDays(state);
   $('progressText').textContent = completed + ' / ' + plan.length;
   $('progressBar').value = completed;
   $('dayNumber').textContent = 'Día ' + (day + 1) + ' de ' + plan.length;
@@ -190,7 +265,16 @@ function renderExercises(exercises) {
     };
     row.append(button('Acierto',() => add(0),'Acierto en ' + name),
       button('Con ayuda o fallo',() => add(1),'Con ayuda o fallo en ' + name),undo,score);
-    card.append(element('h3',name),element('p',instructions),details,row);
+    card.append(element('h3',name));
+    if (mode === 'detailed') {
+      const steps = element('ol','','steps');
+      for (const step of detailed[day][2][index]) steps.append(element('li',step));
+      card.append(steps);
+      details.open = true;
+    } else {
+      card.append(element('p',instructions));
+    }
+    card.append(details,row);
     $('exercises').append(card);
     updateScore(score,counts);
   }
@@ -210,7 +294,11 @@ function renderDay() {
   $('dayTitle').textContent = title;
   $('dayGoal').textContent = goal;
   $('equipment').textContent = 'Prepara: ' + equipment;
-  $('timerTarget').textContent = 'Tiempo previsto: ' + minutes + ' min.';
+  const [guideMinutes,brief] = detailed[day];
+  $('modeBadge').textContent = 'Modo ' + tracks[mode].toLowerCase();
+  $('sessionBrief').hidden = mode === 'quick';
+  $('sessionBrief').textContent = brief;
+  $('timerTarget').textContent = 'Tiempo previsto: ' + (mode === 'quick' ? minutes : guideMinutes) + ' min.';
   $('prev').disabled = day === 0;
   $('next').disabled = day === plan.length - 1;
   $('notes').value = entry.notes;
@@ -229,9 +317,32 @@ function showView(target) {
     if (nav.dataset.view === view) nav.setAttribute('aria-current','page');
     else nav.removeAttribute('aria-current');
   }
-  for (const name of ['today','plan','log']) $(name).hidden = view !== name;
+  for (const name of ['chooseMode','today','plan','log']) $(name).hidden = view !== name;
+  $('workspaceNav').hidden = view === 'chooseMode';
   if (view === 'plan') renderPlan();
   if (view === 'log') renderLog();
+}
+
+function openChooser() {
+  pausedTimers[mode] = timeSpent();
+  timerStart = null;
+  for (const name of Object.keys(tracks)) {
+    const track = progress.tracks[name];
+    $(name + 'Progress').textContent = completedDays(track) + ' de ' + plan.length +
+      ' completados · Continuar en el día ' + (track.day + 1);
+  }
+  showView('chooseMode');
+}
+
+function openMode(target) {
+  mode = target;
+  state = progress.tracks[mode];
+  day = state.day;
+  elapsed = pausedTimers[mode];
+  lastCount = null;
+  renderDay();
+  showView('today');
+  window.scrollTo(0,0);
 }
 
 function selectDay(index) {
@@ -250,12 +361,16 @@ function selectDay(index) {
 }
 
 function renderPlan() {
+  $('planTitle').textContent = 'Rutina K9 · ' + tracks[mode];
+  $('planDescription').textContent = mode === 'quick'
+    ? '14 días de 3 a 5 minutos. Empieza en casa y cambia una dificultad cada vez.'
+    : '14 días de 6 a 10 minutos, con tandas cortas y pausas. Avanza cuando el perro repita el ejercicio con soltura.';
   $('days').replaceChildren();
   plan.forEach(([title,phase,time],index) => {
     const status = {done:'Completado',repeat:'Repetir',pending:'Pendiente'}[state.days[index]?.status ?? 'pending'];
     const card = button('',() => { selectDay(index); if (view === 'today') window.scrollTo(0,0); });
     card.className = 'daycard';
-    card.append(element('span','Día ' + (index+1) + ' · ' + phase + ' · ' + time + ' min'),element('strong',title),element('span',status));
+    card.append(element('span','Día ' + (index+1) + ' · ' + phase + ' · ' + (mode === 'quick' ? time : detailed[index][0]) + ' min'),element('strong',title),element('span',status));
     $('days').append(card);
   });
 }
@@ -345,6 +460,13 @@ function renderLog() {
   }
 }
 
+for (const option of document.querySelectorAll('[data-mode]')) {
+  option.addEventListener('click',() => openMode(option.dataset.mode));
+}
+$('changeMode').addEventListener('click',() => {
+  openChooser();
+  $('chooseTitle').focus();
+});
 for (const nav of document.querySelectorAll('[data-view]')) nav.addEventListener('click',() => showView(nav.dataset.view));
 $('prev').addEventListener('click',() => selectDay(day-1));
 $('next').addEventListener('click',() => selectDay(day+1));
@@ -383,7 +505,7 @@ $('notes').addEventListener('input',() => {
 $('finish').addEventListener('click',() => finish('done'));
 $('repeat').addEventListener('click',() => finish('repeat'));
 $('export').addEventListener('click',() => {
-  const url = URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));
+  const url = URL.createObjectURL(new Blob([JSON.stringify(progress,null,2)],{type:'application/json'}));
   const link = element('a');
   link.href = url;
   link.download = 'a-la-pista-progreso.json';
@@ -398,12 +520,26 @@ $('importFile').addEventListener('change',async () => {
   $('importFile').value = '';
   if (!file) return;
   try {
-    const imported = validate(JSON.parse(await file.text()));
-    if (!window.confirm('La copia sustituirá el progreso de este navegador y reiniciará el cronómetro. ¿Continuar?')) return;
-    state = imported;
+    const data = JSON.parse(await file.text());
+    const imported = validateProgress(data);
+    const legacy = data.version === 1;
+    const message = legacy ? 'Esta copia antigua sustituye el progreso del modo rápido. ¿Continuar?' :
+      'Esta copia sustituye el progreso de ambos modos. ¿Continuar?';
+    if (!window.confirm(message)) return;
+    if (legacy) {
+      progress.tracks.quick = imported.tracks.quick;
+      pausedTimers.quick = 0;
+    } else {
+      progress = imported;
+      pausedTimers.quick = 0;
+      pausedTimers.detailed = 0;
+    }
+    state = progress.tracks[mode];
     day = state.day;
-    elapsed = 0;
-    timerStart = null;
+    if (!legacy || mode === 'quick') {
+      elapsed = 0;
+      timerStart = null;
+    }
     lastCount = null;
     const saved = persist();
     renderDay();
@@ -413,7 +549,7 @@ $('importFile').addEventListener('change',async () => {
     $('importStatus').textContent = 'El archivo no es una copia válida de A la pista.';
   }
 });
-renderDay();
+openChooser();
 setInterval(() => { if (timerStart !== null) updateTimer(); }, 250);
 </script>
 </body>
